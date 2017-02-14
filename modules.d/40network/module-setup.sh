@@ -71,7 +71,6 @@ install() {
     local _arch _i _dir
     inst_multiple ip arping dhclient sed awk
     inst_multiple -o ping ping6
-    inst_multiple -o brctl
     inst_multiple -o teamd teamdctl teamnl
     inst_simple /etc/libnl/classid
     inst_script "$moddir/ifup.sh" "/sbin/ifup"
