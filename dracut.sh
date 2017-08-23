@@ -1688,7 +1688,7 @@ fi
 
 dinfo "*** Creating image file done ***"
 
-if (( maxloglvl >= 5 )); then
+if (( maxloglvl >= 5 )) && (( verbosity_mod_l >= 0 )); then
     if [[ $allowlocal ]]; then
 	"$dracutbasedir/lsinitrd.sh" "${DRACUT_TMPDIR}/initramfs.img" | ddebug
     else
