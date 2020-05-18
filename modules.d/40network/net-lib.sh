@@ -646,7 +646,7 @@ wait_for_ipv6_dad_link() {
 
     while [ $cnt -lt $timeout ]; do
         [ -n "$(ip -6 addr show dev "$1" scope link)" ] \
-        [ -z "$(ip -6 addr show dev "$1" scope link tentative)" ] \
+            && [ -z "$(ip -6 addr show dev "$1" scope link tentative)" ] \
             && return 0
         [ -n "$(ip -6 addr show dev "$1" scope link dadfailed)" ] \
             && return 1
@@ -664,7 +664,7 @@ wait_for_ipv6_dad() {
 
     while [ $cnt -lt $timeout ]; do
         [ -n "$(ip -6 addr show dev "$1")" ] \
-        [ -z "$(ip -6 addr show dev "$1" tentative)" ] \
+            && [ -z "$(ip -6 addr show dev "$1" tentative)" ] \
             && return 0
         [ -n "$(ip -6 addr show dev "$1" dadfailed)" ] \
             && return 1
