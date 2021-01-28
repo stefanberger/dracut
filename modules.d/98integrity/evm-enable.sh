@@ -74,7 +74,7 @@ load_evm_x509() {
         return 1
     fi
 
-    local evm_pubid line
+    local evm_pubid line _relink
     if line=$(keyctl describe %keyring:.evm); then
         # the kernel already setup a trusted .evm keyring so use that one
         evm_pubid=${line%%:*}
@@ -84,6 +84,7 @@ load_evm_x509() {
         if [ -z "${evm_pubid}" ]; then
             # create a new regular _evm keyring
             evm_pubid=$(keyctl newring _evm @u)
+            _relink=1
         fi
     fi
 
@@ -93,6 +94,11 @@ load_evm_x509() {
     if ! EVMX509ID=$(evmctl import "${EVMX509PATH}" "${evm_pubid}"); then
         info "integrity: failed to load the EVM X509 cert ${EVMX509PATH}"
         return 1
+    fi
+
+    if [ "${_relink}" = "1" ]; then
+        keyctl link ${evm_pubid} @u
+        keyctl unlink ${evm_pubid} @s
     fi
 
     if [ "${RD_DEBUG}" = "yes" ]; then

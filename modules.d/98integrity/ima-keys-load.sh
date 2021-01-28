@@ -56,8 +56,15 @@ else
     _ima_id=$(keyctl search @u keyring _ima)
     if [ -z "${_ima_id}" ]; then
         _ima_id=$(keyctl newring _ima @u)
+        _relink=1
     fi
 fi
 
 # load the IMA public key(s)
 load_x509_keys "${_ima_id}"
+
+if [ "${_relink}" = "1" ]; then
+    keyctl link ${_ima_id} @u
+    keyctl unlink ${_ima_id} @s
+    unset _relink
+fi
